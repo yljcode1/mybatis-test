@@ -35,6 +35,11 @@ class AutoConstructorTest {
   private static SqlSessionFactory sqlSessionFactory;
 
   @BeforeAll
+  static void setOne() {
+    System.out.println("-----测试BeforeAll的作用");
+  }
+
+  @BeforeAll
   static void setUp() throws Exception {
     // create a SqlSessionFactory
     try (Reader reader = Resources.getResourceAsReader("org/apache/ibatis/autoconstructor/mybatis-config.xml")) {
@@ -43,11 +48,13 @@ class AutoConstructorTest {
 
     // populate in-memory database
     BaseDataTest.runScript(sqlSessionFactory.getConfiguration().getEnvironment().getDataSource(),
-        "org/apache/ibatis/autoconstructor/CreateDB.sql");
+      "org/apache/ibatis/autoconstructor/CreateDB.sql");
   }
+
 
   @Test
   void fullyPopulatedSubject() {
+
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
       final AutoConstructorMapper mapper = sqlSession.getMapper(AutoConstructorMapper.class);
       final Object subject = mapper.getSubject(1);
